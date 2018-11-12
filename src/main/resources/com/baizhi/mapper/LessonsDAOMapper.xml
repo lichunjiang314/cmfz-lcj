@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.LessonsDAO">
+    <resultMap id="s3" type="com.baizhi.entity.Lessons">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="date" property="date"/>
+            <result column="score" property="score"/>
+            <result column="status" property="status"/>
+            <result column="uid" property="uid"/>
+        <collection property="children" ofType="com.baizhi.entity.Counter">
+            <id column="cid" property="id"/>
+            <result column="cname" property="name"/>
+            <result column="ccount" property="count"/>
+            <result column="clid" property="lid"/>
+            <result column="cdate" property="date"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryByPage" resultMap="s3">
+       select a.id,a.name,a.date,a.score,a.status,a.uid,
+                c.id cid,c.name cname,c.count ccount,c.date cdate,c.lid clid
+                from lessons a left join counter c on a.id = c.lid limit #{start},#{rows}
+    </select>
+
+    <select id="queryTotals" resultType="long">
+       select count(a.id) from counter c inner join lessons a on c.lid = a.id
+    </select>
+
+
+
+    <insert id="insert" parameterType="com.baizhi.entity.Lessons">
+        <selectKey order="AFTER" resultType="int" keyProperty="id">select LAST_INSERT_ID()</selectKey>
+        insert into lessons(name,date,score,status,uid)
+          values(#{name},#{date},#{score},#{status},#{uid})
+    </insert>
+
+    <update id="update" parameterType="com.baizhi.entity.Lessons">
+        update lessons set name=#{name},date={date},score=#{score},status={status},uid=#{uid} where id=#{id}
+    </update>
+
+
+</mapper>

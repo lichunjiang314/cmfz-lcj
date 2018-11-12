@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.GuruDAO">
+    <select id="queryAll" resultType="com.baizhi.entity.Guru">
+        select * from guru
+    </select>
+    <select id="queryById" parameterType="int" resultType="com.baizhi.entity.Guru">
+        select * from guru where id=#{id}
+    </select>
+    <select id="queryByPage" resultType="com.baizhi.entity.Guru">
+       select id,name,headpic,sex from guru limit #{start},#{rows}
+    </select>
+
+    <select id="queryTotals" resultType="long">
+       select count(id) from guru
+    </select>
+
+
+    <insert id="insert" parameterType="com.baizhi.entity.Guru">
+        <selectKey order="AFTER" resultType="int" keyProperty="id">select LAST_INSERT_ID()</selectKey>
+        insert into sowingmap(name,headpic,sex) values(#{name},#{headpic},#{sex})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from guru where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.baizhi.entity.Guru">
+        update sowingmap set name=#{name},headpic=#{headpic},sex=#{sex} where id=#{id}
+    </update>
+</mapper>

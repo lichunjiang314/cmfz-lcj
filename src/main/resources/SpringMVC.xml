@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.1.xsd
+						http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+						 ">
+
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com.baizhi.controller"/>
+
+    <!-- 注册处理器适配器和处理器映射器 -->
+    <mvc:annotation-driven/>
+
+    <!-- 配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <!-- 处理静态资源拦截问题 -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 文件上传解析器
+	  	public static final java.lang.String MULTIPART_RESOLVER_BEAN_NAME = "multipartResolver";
+	  	注意:使用multipartFile接收文件 必须配置文件上传解析器  且名字必须为 multipartResolver
+	  -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 上传文件的最大限制 (单位:字节 2097152 struts2 默认  2M  )-->
+        <property name="maxUploadSize" value="20971520" />
+    </bean>
+
+    <!-- 配置拦截器 -->
+    <mvc:interceptors>
+        <!-- 配置拦截器 -->
+        <mvc:interceptor>
+            <!-- 如果统配路径:必须写两个** -->
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/admin/**"/>
+            <mvc:exclude-mapping path="/guru/**"/>
+            <mvc:exclude-mapping path="/album/**"/>
+            <mvc:exclude-mapping path="/chapter/**"/>
+            <mvc:exclude-mapping path="/menu/**"/>
+            <mvc:exclude-mapping path="/sowingMap/**"/>
+            <mvc:exclude-mapping path="/back/**"/>
+            <mvc:exclude-mapping path="/lessons/**"/>
+            <mvc:exclude-mapping path="/counter/**"/>
+            <mvc:exclude-mapping path="/article/**"/>
+            <bean class="com.baizhi.interceptors.MyInterceptors"/>
+        </mvc:interceptor>
+
+
+    </mvc:interceptors>
+
+
+    <!-- 配置全局异常处理器 -->
+    <bean class="com.baizhi.exceptionresolver.MyExceptionresolver"/>
+
+
+</beans>

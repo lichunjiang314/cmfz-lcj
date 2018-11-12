@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CounterDAO">
+
+
+    <update id="update" parameterType="com.baizhi.entity.Counter">
+        update counter set name=#{name},count=#{count},date=#{date},lid=#{lid} where id=#{id}
+    </update>
+</mapper>
